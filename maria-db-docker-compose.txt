@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mariadb:latest
+    container_name: mysql-api-test
+    environment:
+      MARIADB_ROOT_PASSWORD: secret123
+      MARIADB_DATABASE: testdb
+      MARIADB_USER: apiuser
+      MARIADB_PASSWORD: apipass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "127.0.0.1"]
+      timeout: 20s
+      retries: 10
+      start_period: 40s
+
+volumes:
+  mysql_data:
