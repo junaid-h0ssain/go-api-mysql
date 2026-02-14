@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var RegisterBooksStoreRoutes = func(router *mux.Router){
+func RegisterBooksStoreRoutes(router *mux.Router) {
 	router.HandleFunc("/book/", CreateBook).Methods("POST")
 	router.HandleFunc("/book/{id}", GetBook).Methods("GET")
 	router.HandleFunc("/books/", GetBooks).Methods("GET")

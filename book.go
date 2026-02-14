@@ -5,7 +5,6 @@ import (
 
 )
 
-var db *gorm.DB
 
 type Book struct {
 	gorm.Model
