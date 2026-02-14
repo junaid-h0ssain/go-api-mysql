@@ -6,7 +6,7 @@ import (
 
 )
 
-var db *gorm.DB
+//var db *gorm.DB
 
 func connect(){
 	d, err := gorm.Open("mysql", "")
