@@ -37,3 +37,62 @@ func GetBook(w http.ResponseWriter, r *http.Request) {
 		return 
 	}
 }
+
+func CreateBook(w http.ResponseWriter, r *http.Request) {
+	CreateBook := &Book{}
+	ParseBody(r, CreateBook)
+	b := CreateBook.CreateBook()
+	res, _ := json.Marshal(b)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, err := w.Write(res)
+	if err != nil {
+		return
+	}
+}
+
+func DeleteBook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	bookID := vars["id"]
+	ID, err := strconv.ParseInt(bookID, 0, 0)
+	if err != nil {
+		fmt.Println("Error while parsing")
+	}
+	book := DeleteBookByID(ID)
+	res, _ := json.Marshal(book)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write(res)
+	if err != nil {
+		return
+	}
+}
+
+func UpdateBook(w http.ResponseWriter, r *http.Request) {
+	var updateBook = &Book{}
+	ParseBody(r, updateBook)
+	vars := mux.Vars(r)
+	bookID := vars["id"]
+	ID, err := strconv.ParseInt(bookID, 0, 0)
+	if err != nil {
+		fmt.Println("Error while parsing")
+	}
+	bookDetails, db := GetBookByID(ID)
+	if updateBook.Name != "" {
+		bookDetails.Name = updateBook.Name
+	}
+	if updateBook.Author != "" {
+		bookDetails.Author = updateBook.Author
+	}
+	if updateBook.Publication != "" {
+		bookDetails.Publication = updateBook.Publication
+	}
+	db.Save(&bookDetails)
+	res, _ := json.Marshal(bookDetails)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write(res)
+	if err != nil {
+		return
+	}
+}
